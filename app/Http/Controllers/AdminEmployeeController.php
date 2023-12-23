@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DataHelper;
 use App\helpers\TokenHelper;
 use App\Models\AdminEmployee;
 use Illuminate\Http\Request;
@@ -45,12 +46,24 @@ class AdminEmployeeController extends Controller
             return $tokenResponse;
         }
         else{
-            $admin_employee = AdminEmployee::paginate(10);
+            $model = AdminEmployee::class; // Or replace this with your model
+
+            $columnsToFilter = [
+                'code', 'english_name', 'short_english', 'arabic_name', 'short_arabic', 'bangla_name', 'short_bangla',
+                'is_default', 'rating', 'created_on', 'is_active', 'last_updated',
+                'is_draft', 'is_delete', 'action_user_id', 'action_date',
+                'is_approved', 'is_pending', 'is_in_progress', 'is_rejected',
+                'approved_by', 'approved_date', 'rejected_by', 'rejected_date',
+            ];
+            $filename = 'admin_employeess_list';
+
+            $results = DataHelper::fetchPaginatedData($model, $request, $columnsToFilter, $filename);
+            // $admin_employee = AdminEmployee::paginate(10);
             return response()->json(
                 [
                     'code' => '200',
                     'status' => true,
-                    'data' => $admin_employee,
+                    'data' => $results,
                     'message' => 'Success',
                 ],
                 200
