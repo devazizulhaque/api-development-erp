@@ -14,7 +14,9 @@ class OverviewHelper
         $data['total'] = $model::count();
         $data['new'] = $model::whereDate($dateColumn, Carbon::today())->count();
         $data['draft'] = $model::where('is_draft', 1)->count();
-        $data['approved'] = $model::where('is_approved', 1)->count();
+        if (isset($data['approved'])) {
+            $data['approved'] = $model::where('is_approved', 1)->count();
+        }
         $data['active'] = $model::where('is_active', 1)->count();
         $data['in_active'] = $model::where('is_active', 0)->count();
         $data['update'] = $model::whereDate('last_updated', Carbon::today())

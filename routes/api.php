@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdminAllowanceTypeController;
 use App\Http\Controllers\AdminCurrencyHistoryController;
+use App\Http\Controllers\AdminDesignationController;
 use App\Http\Controllers\AdminEmployeeController;
+use App\Http\Controllers\AdminLeaveTypeController;
+use App\Http\Controllers\AdminLoanTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,16 +30,22 @@ Route::get('/admin-employee/{id}', [AdminEmployeeController::class, 'show']);
 Route::post('/admin-employee/{id}', [AdminEmployeeController::class, 'update']);
 Route::get('/admin-employee-overview', [AdminEmployeeController::class, 'overview']);
 
+Route::middleware(['check.token'])->group(function () {
+    //admin designation
+    Route::apiResource('/admin-designation', AdminDesignationController::class);
+    Route::get('/admin-designation-overview', [AdminDesignationController::class, 'overview'])->name('admin-designation.overview');
 
-Route::get('/admin-employee/overview', [AdminEmployeeController::class, 'overview']);
-Route::post('/admin-employee/export', [AdminEmployeeController::class, 'export']);
+    //admin leave type
+    Route::apiResource('/admin-leave-type', AdminLeaveTypeController::class);
+    Route::get('/admin-leave-type-overview', [AdminLeaveTypeController::class, 'overview'])->name('admin-leave.overview');
+
+    //admin allowance type
+    Route::apiResource('/admin-allowance-type', AdminAllowanceTypeController::class);
+    Route::get('/admin-allowance-type-overview', [AdminAllowanceTypeController::class, 'overview'])->name('admin-allowance.overview');
+
+    //admin loan type
+    Route::apiResource('/admin-loan-type', AdminLoanTypeController::class);
+    Route::get('/admin-loan-type-overview', [AdminLoanTypeController::class, 'overview'])->name('admin-loan.overview');
+});
 
 
-
-//admin currency
-Route::get('/admin-currency-history/overview', [AdminCurrencyHistoryController::class, 'overview']);
-Route::post('/admin-currency-history/export', [AdminCurrencyHistoryController::class, 'export']);
-Route::get('/admin-currency-history', [AdminCurrencyHistoryController::class, 'admin_currency_histories']);
-Route::get('/admin-currency-history/{id}', [AdminCurrencyHistoryController::class, 'admin_currency_history']);
-Route::post('/admin-currency-history-store', [AdminCurrencyHistoryController::class, 'admin_currency_history_store']);
-Route::post('/admin-currency-history-update/{id}', [AdminCurrencyHistoryController::class, 'admin_currency_history_update']);
